@@ -8,9 +8,9 @@ const
         if (attributeList) { Object.entries(attributeList).forEach(([attribute, value]) => value ? node.setAttribute(attribute, value) : node.removeAttribute(attribute)); }
         const extendedNode = Object.assign(node, customProps, props, {
             /** @type {ExtendMethods["_"]} */
-            _: (...children) => { node.append(...children.filter(c => c !== undefined)); return extendedNode; },
+            _: (...children) => { node.append(...children.flat().filter(c => c !== undefined && c !== null)); return extendedNode; },
             /** @type {ExtendMethods["__"]} */
-            __: (...children) => { node.replaceChildren(...children.filter(c => c !== undefined)); return extendedNode; },
+            __: (...children) => { node.replaceChildren(...children.flat().filter(c => c !== undefined && c !== null)); return extendedNode; },
             /** @type {ExtendMethods["$"]} */
             $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); },
             /** @type {ExtendMethods["$$"]} */
