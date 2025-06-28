@@ -1,0 +1,6 @@
+{
+    "name": "simple-dom",
+    "version": "1.0.0",
+    "type": "module",
+    "jsdelivr": "./global.js"
+}

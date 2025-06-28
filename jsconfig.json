@@ -6,9 +6,12 @@
         "checkJs": true,
         "strict": true,
         "baseUrl": "./",
-        "noImplicitAny": false
+        "noImplicitAny": true,
+        "types": [
+            "./types.d.ts"
+        ]
     },
     "include": [
         "./**/*.js"
-    ],
+    ]
 }
