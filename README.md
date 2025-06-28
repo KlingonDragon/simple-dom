@@ -15,3 +15,6 @@ or
 ```
 ## Type Checking in an IDE
 Unfortunatly, the only method I've found to use this in a js project is to download [`types.d.ts`](./types.d.ts)
+```js
+/// <reference path="./simple-dom.d.ts" />
+```
