@@ -1,4 +1,4 @@
-export const
+const
     /** @type {ExtendElement} */
     __ = (node, { dataset, style, classList, attributeList, customProps, ...props } = {}) => {
         if (dataset) { Object.assign(node.dataset, dataset); }
