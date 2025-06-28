@@ -1,3 +1,4 @@
+// @ts-ignore (.d.ts declaration vs .js implementation)
 const
     /** @type {ExtendElement} */
     __ = (node, { dataset, style, classList, attributeList, customProps, ...props } = {}) => {

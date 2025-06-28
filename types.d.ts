@@ -35,6 +35,8 @@ type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(sel
 type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<SelectorTagNameMap[S], C>[];
 type Delay = (seconds: number) => Promise<void>;
 type WaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<NonNullable<SelectorTagNameMap[S]>>>;
+//#endregion
+//#region Global
 interface Window {
     __: ExtendElement;
     _: CreateHTMLElement;
@@ -45,9 +47,17 @@ interface Window {
     delay: Delay;
     waitForIt: WaitForIt;
 }
+declare const __: ExtendElement;
+declare const _: CreateHTMLElement;
+declare const _svg: CreateSVGElement;
+declare const _maths: CreateMathsElement;
+declare const $: QuerySelector;
+declare const $$: QuerySelectorAll;
+declare const delay: Delay;
+declare const waitForIt: WaitForIt;
 //#endregion
 
-//#region OVERRIDES
+//#region Overrides
 type BaseQuerySelector = <S extends SelectorTagName>(selectors: S) => SelectorTagNameMap[S] | null;
 type BaseQuerySelectorAll = <S extends SelectorTagName>(selectors: S) => NodeListOf<SelectorTagNameMap[S]>;
 interface Document {
