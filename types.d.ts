@@ -20,7 +20,7 @@ interface ExtendMethods {
     $: QuerySelector;
     $$: QuerySelectorAll;
     on: (type: string, listener: EventListenerOrEventListenerObject) => this;
-
+    do: (type: string) => this;
 }
 type CustomProps = Record<string, any>;
 type ExtendProps<D extends DOMNode, C extends CustomProps = {}> = { dataset?: DOMStringMap; style?: Partial<CSSStyleDeclaration>; classList?: (string | undefined)[]; attributeList?: Record<string, string>; customProps?: C; } & Partial<Omit<D, 'dataset' | 'style' | 'classList'>>;

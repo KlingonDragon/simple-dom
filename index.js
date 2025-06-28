@@ -16,7 +16,9 @@ const
             /** @type {ExtendMethods["$$"]} */
             $$: (selectors, props = {}) => [...extendedNode.querySelectorAll(selectors)].map(x => __(x, props)),
             /** @type {ExtendMethods["on"]} */
-            on: (type, listener) => { node.addEventListener(type, listener); return extendedNode; }
+            on: (type, listener) => { node.addEventListener(type, listener); return extendedNode; },
+            /** @type {ExtendMethods["do"]} */
+            do: (type) => { node.dispatchEvent(new Event(type)); return extendedNode; },
         });
         return extendedNode;
     },
