@@ -42,3 +42,4 @@ export const
         observer.observe(document.documentElement, { characterData: false, attributes: false, childList: true, subtree: true });
         timeOutSeconds && delay(timeOutSeconds).then(() => { observer.disconnect(); reject(); });
     });
+Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt });
