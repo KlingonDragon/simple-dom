@@ -23,7 +23,16 @@ interface ExtendMethods {
     do: (type: string) => this;
 }
 type CustomProps = Record<string, any>;
-type ExtendProps<D extends DOMNode, C extends CustomProps = {}> = { dataset?: DOMStringMap; style?: Partial<CSSStyleDeclaration>; classList?: (string | undefined)[]; attributeList?: Record<string, string>; customProps?: C; } & Partial<Omit<D, 'dataset' | 'style' | 'classList'>>;
+type ExtendProps<D extends DOMNode, C extends CustomProps = {}> = { dataset?: DOMStringMap; style?: Partial<CSSStyleDeclaration>; classList?: (string | undefined | null)[]; attributeList?: Record<string, string>; customProps?: C; } & Partial<Omit<D, 'dataset' | 'style' | 'classList'>>;
+interface ObjectUtilities<Values> {
+    entries: [string, Values][];
+    keys: string[];
+    values: Values[];
+    forEach: (callbackfn: (value: [string, Values], index: number, array: [string, Values][]) => void) => void;
+    map: <ReturnValue>(callbackfn: (value: [string, Values], index: number, array: [string, Values][]) => ReturnValue) => ReturnValue[];
+    reduce: <InitialValue>(callbackfn: (previousValue: InitialValue, currentValue: [string, Values], currentIndex: number, array: [string, Values][]) => InitialValue, initialValue: InitialValue) => InitialValue;
+    filter: (predicate: (value: [string, Values], index: number, array: [string, Values][]) => unknown) => [string, Values][];
+}
 //#endregion
 
 //#region Functions
@@ -35,6 +44,8 @@ type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(sel
 type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<SelectorTagNameMap[S], C>[];
 type Delay = (seconds: number) => Promise<void>;
 type WaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<NonNullable<SelectorTagNameMap[S]>>>;
+type NewStyleSheet = (cssText: string, options?: { fromURL?: boolean; addToPage?: boolean; }) => Promise<CSSStyleSheet>;
+type ObjectUtilityFunction = <Values>(object: Record<string, Values>) => ObjectUtilities<Values>;
 //#endregion
 //#region Global
 interface Window {
@@ -46,6 +57,9 @@ interface Window {
     $$: QuerySelectorAll;
     delay: Delay;
     waitForIt: WaitForIt;
+    _css: NewStyleSheet;
+    O: ObjectUtilityFunction;
+
 }
 declare const __: ExtendElement;
 declare const _: CreateHTMLElement;
@@ -55,6 +69,8 @@ declare const $: QuerySelector;
 declare const $$: QuerySelectorAll;
 declare const delay: Delay;
 declare const waitForIt: WaitForIt;
+declare const _css: NewStyleSheet;
+declare const O: ObjectUtilityFunction;
 //#endregion
 
 //#region Overrides

@@ -4,13 +4,13 @@ const
     __ = (node, { dataset, style, classList, attributeList, customProps, ...props } = {}) => {
         if (dataset) { Object.assign(node.dataset, dataset); }
         if (style) { Object.assign(node.style, style); }
-        if (classList) { node.classList.add(...classList.filter(item => item !== undefined)); }
+        if (classList) { node.classList.add(...classList.filter(item => item !== undefined && item !== null)); }
         if (attributeList) { Object.entries(attributeList).forEach(([attribute, value]) => value ? node.setAttribute(attribute, value) : node.removeAttribute(attribute)); }
         const extendedNode = Object.assign(node, customProps, props, {
             /** @type {ExtendMethods["_"]} */
-            _: (...children) => { node.append(...children.flat().filter(c => c !== undefined && c !== null)); return extendedNode; },
+            _: (...children) => { node.append(...children.flat().filter(child => child !== undefined && child !== null)); return extendedNode; },
             /** @type {ExtendMethods["__"]} */
-            __: (...children) => { node.replaceChildren(...children.flat().filter(c => c !== undefined && c !== null)); return extendedNode; },
+            __: (...children) => { node.replaceChildren(...children.flat().filter(child => child !== undefined && child !== null)); return extendedNode; },
             /** @type {ExtendMethods["$"]} */
             $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); },
             /** @type {ExtendMethods["$$"]} */
@@ -44,5 +44,25 @@ const
         });
         observer.observe(document.documentElement, { characterData: false, attributes: false, childList: true, subtree: true });
         timeOutSeconds && delay(timeOutSeconds).then(() => { observer.disconnect(); reject(); });
-    });
-Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt });
+    }),
+    /** @type {NewStyleSheet} */
+    _css = (cssTextOrURL, { fromURL = false, addToPage = true } = {}) => (fromURL ? fetch(cssTextOrURL).then(r => r.text()) : Promise.resolve(cssTextOrURL)).then(cssText => {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(cssText);
+        addToPage && document.adoptedStyleSheets.push(sheet);
+        return sheet;
+    }),
+    /** @type {ObjectUtilityFunction} */
+    O = (obj) => {
+        const entries = Object.entries(obj);
+        return ({
+            entries: entries,
+            keys: Object.keys(obj),
+            values: Object.values(obj),
+            forEach: callbackfn => entries.forEach(callbackfn),
+            map: callbackfn => entries.map(callbackfn),
+            reduce: (callbackfn, initialValue) => entries.reduce(callbackfn, initialValue),
+            filter: callbackfn => entries.filter(callbackfn),
+        });
+    };
+Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt, _css, O });
