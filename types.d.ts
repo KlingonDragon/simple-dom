@@ -44,7 +44,7 @@ type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(sel
 type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<SelectorTagNameMap[S], C>[];
 type Delay = (seconds: number) => Promise<void>;
 type WaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<NonNullable<SelectorTagNameMap[S]>>>;
-type NewStyleSheet = (cssText: string, options?: { fromURL?: boolean; addToPage?: boolean; }) => Promise<CSSStyleSheet>;
+type NewStyleSheet = (cssText: string, options?: { fromURL?: boolean = false; addToPage?: boolean = true; }) => Promise<CSSStyleSheet>;
 type ObjectUtilityFunction = <Values>(object: Record<string, Values>) => ObjectUtilities<Values>;
 //#endregion
 //#region Global
