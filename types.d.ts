@@ -22,7 +22,7 @@ interface ExtendMethods {
     on: (type: string, listener: EventListenerOrEventListenerObject) => this;
     do: (type: string) => this;
 }
-type CustomProps = Record<string, any>;
+type CustomProps = Record<string, unknown>;
 type ExtendProps<D extends DOMNode, C extends CustomProps = {}> = { dataset?: DOMStringMap; style?: Partial<CSSStyleDeclaration>; classList?: (string | undefined | null)[]; attributeList?: Record<string, string>; customProps?: C; } & Partial<Omit<D, 'dataset' | 'style' | 'classList'>>;
 interface ObjectUtilities<Values> {
     entries: [string, Values][];
@@ -40,10 +40,12 @@ type ExtendElement = <D extends DOMNode, C extends CustomProps = {}>(node: D, pr
 type CreateHTMLElement = <T extends keyof HTMLElementTagNameMap, C extends CustomProps = {}>(tagName: T, props?: ExtendProps<HTMLElementTagNameMap[T], C>) => Extended<HTMLElementTagNameMap[T], C>;
 type CreateSVGElement = <T extends keyof SVGElementTagNameMap, C extends CustomProps = {}>(tagName: T, props?: ExtendProps<SVGElementTagNameMap[T], C>) => Extended<SVGElementTagNameMap[T], C>;
 type CreateMathsElement = <T extends keyof MathMLElementTagNameMap, C extends CustomProps = {}>(tagName: T, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<MathMLElementTagNameMap[T], C>;
-type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<SelectorTagNameMap[S], C> | null;
-type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<MathMLElementTagNameMap[T], C>) => Extended<SelectorTagNameMap[S], C>[];
+type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>) => Extended<SelectorTagNameMap[S], C> | null;
+type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>) => Extended<SelectorTagNameMap[S], C>[];
 type Delay = (seconds: number) => Promise<void>;
-type WaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<NonNullable<SelectorTagNameMap[S]>>>;
+/** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
+type DeprecatedWaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<SelectorTagNameMap[S]>>;
+type WaitSelector = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>, timeOutSeconds?: number) => Promise<Extended<SelectorTagNameMap[S], C>>;
 type NewStyleSheet = (cssText: string, options?: { fromURL?: boolean = false; addToPage?: boolean = true; }) => Promise<CSSStyleSheet>;
 type ObjectUtilityFunction = <Values>(object: Record<string, Values>) => ObjectUtilities<Values>;
 //#endregion
@@ -56,7 +58,9 @@ interface Window {
     $: QuerySelector;
     $$: QuerySelectorAll;
     delay: Delay;
-    waitForIt: WaitForIt;
+    /** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
+    waitForIt: DeprecatedWaitForIt;
+    wait$: WaitSelector;
     _css: NewStyleSheet;
     O: ObjectUtilityFunction;
 
@@ -68,7 +72,9 @@ declare const _maths: CreateMathsElement;
 declare const $: QuerySelector;
 declare const $$: QuerySelectorAll;
 declare const delay: Delay;
-declare const waitForIt: WaitForIt;
+/** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
+declare const waitForIt: DeprecatedWaitForIt;
+declare const wait$: WaitSelector;
 declare const _css: NewStyleSheet;
 declare const O: ObjectUtilityFunction;
 //#endregion

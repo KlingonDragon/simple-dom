@@ -1,5 +1,4 @@
-// @ts-ignore (.d.ts declaration vs .js implementation)
-const
+const // Ignore ts(6200) - .d.ts declaration vs .js implementation
     /** @type {ExtendElement} */
     __ = (node, { dataset, style, classList, attributeList, customProps, ...props } = {}) => {
         if (dataset) { Object.assign(node.dataset, dataset); }
@@ -12,9 +11,9 @@ const
             /** @type {ExtendMethods["__"]} */
             __: (...children) => { node.replaceChildren(...children.flat().filter(child => child !== undefined && child !== null)); return extendedNode; },
             /** @type {ExtendMethods["$"]} */
-            $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); },
+            $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); }, // Ignore ts(2719) - TS C vs C mismatch
             /** @type {ExtendMethods["$$"]} */
-            $$: (selectors, props = {}) => [...extendedNode.querySelectorAll(selectors)].map(x => __(x, props)),
+            $$: (selectors, props = {}) => [...extendedNode.querySelectorAll(selectors)].map(x => __(x, props)), // Ignore ts(2719) - TS C vs C mismatch
             /** @type {ExtendMethods["on"]} */
             on: (type, listener) => { node.addEventListener(type, listener); return extendedNode; },
             /** @type {ExtendMethods["do"]} */
@@ -34,17 +33,19 @@ const
     $$ = (selectors, props = {}) => [...document.querySelectorAll(selectors)].map(x => __(x, props)),
     /** @type {Delay} */
     delay = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1e3)),
-    /** @type {WaitForIt} */
-    waitForIt = (selector, timeOutSeconds) => new Promise((resolve, reject) => {
-        const testElement = $(selector);
+    /** @type {WaitSelector} */
+    wait$ = (selectors, props = {}, timeOutSeconds) => new Promise((resolve, reject) => {
+        const testElement = $(selectors, props);
         if (testElement) { resolve(testElement); return; }
         const observer = new MutationObserver((_, observer) => {
-            const testElement = $(selector);
+            const testElement = $(selectors, props);
             if (testElement) { observer.disconnect(); resolve(testElement); }
         });
         observer.observe(document.documentElement, { characterData: false, attributes: false, childList: true, subtree: true });
         timeOutSeconds && delay(timeOutSeconds).then(() => { observer.disconnect(); reject(); });
     }),
+    /** @type {DeprecatedWaitForIt} */
+    waitForIt = (selectors, timeOutSeconds) => wait$(selectors, undefined, timeOutSeconds),
     /** @type {NewStyleSheet} */
     _css = (cssTextOrURL, { fromURL = false, addToPage = true } = {}) => (fromURL ? fetch(cssTextOrURL).then(r => r.text()) : Promise.resolve(cssTextOrURL)).then(cssText => {
         const sheet = new CSSStyleSheet();
@@ -65,4 +66,4 @@ const
             filter: callbackfn => entries.filter(callbackfn),
         });
     };
-Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt, _css, O });
+Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O });
