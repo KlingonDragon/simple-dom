@@ -15,8 +15,8 @@ type SelectorTagName = keyof SelectorTagNameMap;
 //#region Extension Types
 type Extended<D extends DOMNode, C extends CustomProps = {}> = D & C & ExtendMethods;
 interface ExtendMethods {
-    _: (...children: (DOMNode | string | undefined | null | (DOMNode | string | undefined | null)[])[]) => this;
-    __: (...children: (DOMNode | string | undefined | null | (DOMNode | string | undefined | null)[])[]) => this;
+    _: (...children: (DOMNode | string | false | undefined | null | (DOMNode | string | false | undefined | null)[])[]) => this;
+    __: (...children: (DOMNode | string | false | undefined | null | (DOMNode | string | false | undefined | null)[])[]) => this;
     $: QuerySelector;
     $$: QuerySelectorAll;
     on: (type: string, listener: EventListenerOrEventListenerObject) => this;

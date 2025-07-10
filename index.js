@@ -7,9 +7,9 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
         if (attributeList) { Object.entries(attributeList).forEach(([attribute, value]) => value ? node.setAttribute(attribute, value) : node.removeAttribute(attribute)); }
         const extendedNode = Object.assign(node, customProps, props, {
             /** @type {ExtendMethods["_"]} */
-            _: (...children) => { node.append(...children.flat().filter(child => child !== undefined && child !== null)); return extendedNode; },
+            _: (...children) => { node.append(...children.flat().filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
             /** @type {ExtendMethods["__"]} */
-            __: (...children) => { node.replaceChildren(...children.flat().filter(child => child !== undefined && child !== null)); return extendedNode; },
+            __: (...children) => { node.replaceChildren(...children.flat().filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
             /** @type {ExtendMethods["$"]} */
             $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); }, // Ignore ts(2719) - TS C vs C mismatch
             /** @type {ExtendMethods["$$"]} */
@@ -54,16 +54,13 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
         return sheet;
     }),
     /** @type {ObjectUtilityFunction} */
-    O = (obj) => {
-        const entries = Object.entries(obj);
-        return ({
-            entries: entries,
-            keys: Object.keys(obj),
-            values: Object.values(obj),
-            forEach: callbackfn => entries.forEach(callbackfn),
-            map: callbackfn => entries.map(callbackfn),
-            reduce: (callbackfn, initialValue) => entries.reduce(callbackfn, initialValue),
-            filter: callbackfn => entries.filter(callbackfn),
-        });
-    };
+    O = (obj) => ({
+        entries: Object.entries(obj),
+        keys: Object.keys(obj),
+        values: Object.values(obj),
+        forEach: callbackfn => Object.entries(obj).forEach(callbackfn),
+        map: callbackfn => Object.entries(obj).map(callbackfn),
+        reduce: (callbackfn, initialValue) => Object.entries(obj).reduce(callbackfn, initialValue),
+        filter: callbackfn => Object.entries(obj).filter(callbackfn),
+    });
 Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O });
