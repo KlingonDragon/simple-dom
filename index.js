@@ -17,7 +17,7 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
             /** @type {ExtendMethods["on"]} */
             on: (type, listener) => { node.addEventListener(type, listener); return extendedNode; },
             /** @type {ExtendMethods["do"]} */
-            do: (type) => { node.dispatchEvent(new Event(type)); return extendedNode; },
+            do: (type, eventInitDict) => { type === 'click' && 'click' in node ? node.click() : node.dispatchEvent(new Event(type, eventInitDict)); return extendedNode; },
         });
         return extendedNode;
     },
