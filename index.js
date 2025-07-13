@@ -1,4 +1,6 @@
 const // Ignore ts(6200) - .d.ts declaration vs .js implementation
+    /** @type {Flat} */
+    flat = (array) => array.flatMap(element => Array.isArray(element) ? flat(element) : [element]),
     /** @type {ExtendElement} */
     __ = (node, { dataset, style, classList, attributeList, customProps, ...props } = {}) => {
         if (dataset) { Object.assign(node.dataset, dataset); }
@@ -7,9 +9,9 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
         if (attributeList) { Object.entries(attributeList).forEach(([attribute, value]) => value ? node.setAttribute(attribute, value) : node.removeAttribute(attribute)); }
         const extendedNode = Object.assign(node, customProps, props, {
             /** @type {ExtendMethods["_"]} */
-            _: (...children) => { node.append(...children.flat().filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
+            _: (...children) => { node.append(...flat(children).filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
             /** @type {ExtendMethods["__"]} */
-            __: (...children) => { node.replaceChildren(...children.flat().filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
+            __: (...children) => { node.replaceChildren(...flat(children).filter(child => child !== undefined && child !== null && child !== false)); return extendedNode; },
             /** @type {ExtendMethods["$"]} */
             $: (selectors, props = {}) => { const x = extendedNode.querySelector(selectors); return x && __(x, props); }, // Ignore ts(2719) - TS C vs C mismatch
             /** @type {ExtendMethods["$$"]} */
@@ -63,4 +65,4 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
         reduce: (callbackfn, initialValue) => Object.entries(obj).reduce(callbackfn, initialValue),
         filter: callbackfn => Object.entries(obj).filter(callbackfn),
     });
-Object.assign(window, { __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O });
+Object.assign(window, { flat, __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O });

@@ -1,3 +1,7 @@
+//#region Utility Types
+type Nested<T> = (T | Nested<T>)[];
+//#endregion
+
 //#region Tag Mapping
 type FullElementTagNameMap = HTMLElementTagNameMap & SVGElementTagNameMap & MathMLElementTagNameMap;
 type DOMNode = FullElementTagNameMap[keyof FullElementTagNameMap];
@@ -15,8 +19,8 @@ type SelectorTagName = keyof SelectorTagNameMap;
 //#region Extension Types
 type Extended<D extends DOMNode, C extends CustomProps = {}> = D & C & ExtendMethods;
 interface ExtendMethods {
-    _: (...children: (DOMNode | string | false | undefined | null | (DOMNode | string | false | undefined | null)[])[]) => this;
-    __: (...children: (DOMNode | string | false | undefined | null | (DOMNode | string | false | undefined | null)[])[]) => this;
+    _: (...children: Nested<DOMNode | string | false | undefined | null>) => this;
+    __: (...children: Nested<DOMNode | string | false | undefined | null>) => this;
     $: QuerySelector;
     $$: QuerySelectorAll;
     on: (type: string, listener: EventListenerOrEventListenerObject) => this;
@@ -36,6 +40,7 @@ interface ObjectUtilities<Values> {
 //#endregion
 
 //#region Functions
+type Flat = <T>(array: Nested<T>) => T[];
 type ExtendElement = <D extends DOMNode, C extends CustomProps = {}>(node: D, props?: ExtendProps<D, C>) => Extended<D, C>;
 type CreateHTMLElement = <T extends keyof HTMLElementTagNameMap, C extends CustomProps = {}>(tagName: T, props?: ExtendProps<HTMLElementTagNameMap[T], C>) => Extended<HTMLElementTagNameMap[T], C>;
 type CreateSVGElement = <T extends keyof SVGElementTagNameMap, C extends CustomProps = {}>(tagName: T, props?: ExtendProps<SVGElementTagNameMap[T], C>) => Extended<SVGElementTagNameMap[T], C>;
@@ -51,6 +56,7 @@ type ObjectUtilityFunction = <Values>(object: Record<string, Values>) => ObjectU
 //#endregion
 //#region Global
 interface Window {
+    flat: Flat;
     __: ExtendElement;
     _: CreateHTMLElement;
     _svg: CreateSVGElement;
@@ -65,6 +71,7 @@ interface Window {
     O: ObjectUtilityFunction;
 
 }
+declare const flat: Flat;
 declare const __: ExtendElement;
 declare const _: CreateHTMLElement;
 declare const _svg: CreateSVGElement;
