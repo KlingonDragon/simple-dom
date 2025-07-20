@@ -22,7 +22,7 @@ Originally, all functions were made available globally by adding them to the `wi
 ```js
 const { flat, __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O } = window.simpleDOM;
 ```
-**Note:** If you import the script in such a way that it is bundled into the same scope, the functions will remain available even without unpacking them.
+**Note:** If you import the script in such a way that it is bundled into the same scope, the functions will remain available even without unpacking them. Unpacking could then cause a conflict if done in the same scope.
 
 ## Type Checking in an IDE
 Unfortunatly, the only method I've found to use this in a js project is to download [`types.d.ts`](./types.d.ts) and either reference it directly or include it in your `jsconfig.json`:
