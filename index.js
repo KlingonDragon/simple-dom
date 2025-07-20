@@ -64,5 +64,6 @@ const // Ignore ts(6200) - .d.ts declaration vs .js implementation
         map: callbackfn => Object.entries(obj).map(callbackfn),
         reduce: (callbackfn, initialValue) => Object.entries(obj).reduce(callbackfn, initialValue),
         filter: callbackfn => Object.entries(obj).filter(callbackfn),
-    });
-Object.assign(window, { flat, __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O });
+    }),
+    simpleDOM = { flat, __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O };
+Object.assign(window, { ...simpleDOM, simpleDOM });

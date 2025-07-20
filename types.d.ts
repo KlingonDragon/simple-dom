@@ -69,7 +69,21 @@ interface Window {
     wait$: WaitSelector;
     _css: NewStyleSheet;
     O: ObjectUtilityFunction;
-
+    simpleDOM?: {
+        flat: Flat;
+        __: ExtendElement;
+        _: CreateHTMLElement;
+        _svg: CreateSVGElement;
+        _maths: CreateMathsElement;
+        $: QuerySelector;
+        $$: QuerySelectorAll;
+        delay: Delay;
+        /** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
+        waitForIt: DeprecatedWaitForIt;
+        wait$: WaitSelector;
+        _css: NewStyleSheet;
+        O: ObjectUtilityFunction;
+    };
 }
 declare const flat: Flat;
 declare const __: ExtendElement;
