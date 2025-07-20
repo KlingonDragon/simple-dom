@@ -69,7 +69,7 @@ interface Window {
     wait$: WaitSelector;
     _css: NewStyleSheet;
     O: ObjectUtilityFunction;
-    simpleDOM?: {
+    simpleDOM: {
         flat: Flat;
         __: ExtendElement;
         _: CreateHTMLElement;
