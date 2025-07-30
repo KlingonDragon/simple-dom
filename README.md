@@ -18,11 +18,11 @@ or
 </head>
 ```
 ### Deprecation of global window assignment
-Originally, all functions were made available globally by adding them to the `window` object; this could conflict with something else using the same name (e.g. jQuery using `$`). Version 0.6.0 will be the last version supporting this; from 0.6.0 onward, all functions will be made available under a single `window.simpleDOM` object. The recommended usage is to unpack them:
+All functions are available under a single `window.simpleDOM` object. The recommended usage is to unpack them:
 ```js
-const { flat, __, _, _svg, _maths, $, $$, delay, waitForIt, wait$, _css, O } = window.simpleDOM;
+const { flat, __, _, _svg, _maths, $, $$, delay, wait$, _css, O, lock } = window.simpleDOM;
 ```
-**Note:** If you import the script in such a way that it is bundled into the same scope, the functions will remain available even without unpacking them. Unpacking could then cause a conflict if done in the same scope.
+Originally, all functions were made available globally by adding them to the `window` object; this could conflict with something else using the same name (e.g. jQuery using `$`). Version 0.6.x was the last version supporting this.
 
 ## Type Checking in an IDE
 Unfortunatly, the only method I've found to use this in a js project is to download [`types.d.ts`](./types.d.ts) and either reference it directly or include it in your `jsconfig.json`:

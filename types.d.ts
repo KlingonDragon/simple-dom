@@ -48,14 +48,14 @@ type CreateMathsElement = <T extends keyof MathMLElementTagNameMap, C extends Cu
 type QuerySelector = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>) => Extended<SelectorTagNameMap[S], C> | null;
 type QuerySelectorAll = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>) => Extended<SelectorTagNameMap[S], C>[];
 type Delay = (seconds: number) => Promise<void>;
-/** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
-type DeprecatedWaitForIt = <S extends SelectorTagName>(selectors: S, timeOutSeconds?: number) => Promise<Extended<SelectorTagNameMap[S]>>;
 type WaitSelector = <S extends SelectorTagName, C extends CustomProps = {}>(selectors: S, props?: ExtendProps<SelectorTagNameMap[S], C>, timeOutSeconds?: number) => Promise<Extended<SelectorTagNameMap[S], C>>;
 type NewStyleSheet = (cssText: string, options?: { fromURL?: boolean = false; addToPage?: boolean = true; }) => Promise<CSSStyleSheet>;
 type ObjectUtilityFunction = <Values>(object: Record<string, Values>) => ObjectUtilities<Values>;
+type LockFunction = (name: string) => <T>(callback: (lock: Lock | null) => Promise<T>) => Promise<T>;
 //#endregion
+
 //#region Global
-interface Window {
+interface SimpleDOM {
     flat: Flat;
     __: ExtendElement;
     _: CreateHTMLElement;
@@ -64,41 +64,17 @@ interface Window {
     $: QuerySelector;
     $$: QuerySelectorAll;
     delay: Delay;
-    /** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
-    waitForIt: DeprecatedWaitForIt;
     wait$: WaitSelector;
     _css: NewStyleSheet;
     O: ObjectUtilityFunction;
-    simpleDOM: {
-        flat: Flat;
-        __: ExtendElement;
-        _: CreateHTMLElement;
-        _svg: CreateSVGElement;
-        _maths: CreateMathsElement;
-        $: QuerySelector;
-        $$: QuerySelectorAll;
-        delay: Delay;
-        /** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
-        waitForIt: DeprecatedWaitForIt;
-        wait$: WaitSelector;
-        _css: NewStyleSheet;
-        O: ObjectUtilityFunction;
-    };
+    lock: LockFunction;
+};
+interface Window {
+    simpleDOM: SimpleDOM;
 }
-declare const flat: Flat;
-declare const __: ExtendElement;
-declare const _: CreateHTMLElement;
-declare const _svg: CreateSVGElement;
-declare const _maths: CreateMathsElement;
-declare const $: QuerySelector;
-declare const $$: QuerySelectorAll;
-declare const delay: Delay;
-/** @deprecated Use `wait$` instead. `waitForIt` will be removed in a future version.*/
-declare const waitForIt: DeprecatedWaitForIt;
-declare const wait$: WaitSelector;
-declare const _css: NewStyleSheet;
-declare const O: ObjectUtilityFunction;
+declare const simpleDOM: SimpleDOM;
 //#endregion
+
 
 //#region Overrides
 type BaseQuerySelector = <S extends SelectorTagName>(selectors: S) => SelectorTagNameMap[S] | null;
